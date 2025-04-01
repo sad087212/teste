@@ -1,0 +1,84 @@
+﻿@model List<Aluno>
+
+@{
+    ViewBag.Title = "Leads";
+    Layout = "_Layout";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="container mt-4">
+    <form id="filterForm" class="d-flex gap-3 mb-4" oninput="filterStudents()">
+        <div class="form-group">
+            <label for="name" class="form-label">Pesquisar por Nome:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Digite o nome"/>
+        </div>
+        <div class="form-group">
+            <label for="email" class="form-label">Pesquisar por Email:</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Digite o email"/>
+        </div>
+        <div class="form-group">
+            <label for="course" class="form-label">Curso</label>
+            <select class="form-select" id="course" name="course">
+                <option value="">Selecione um curso</option>
+                @foreach (var curso in ViewBag.Cursos)
+                {
+                    <option value="@curso.Descricao">@curso.Descricao</option>
+                }
+            </select>
+        </div>
+    </form>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Codigo de Matricula</th>
+            <th scope="col">Email</th>
+            <th scope="col">Curso</th>
+            <th scope="col">Turma</th>
+        </tr>
+        </thead>
+        <tbody id="studentTable">
+        @if (Model.Any())
+        {
+            foreach (var aluno in Model)
+            {
+                <tr>
+                    <th scope="row">@aluno.Id</th>
+                    <td>@aluno.Nome</td>
+                    <td>@aluno.CodigoMatricula</td>
+                    <td>@aluno.Email</td>
+                    <td>@aluno.Curso.Descricao</td>
+                    <td>@aluno.Turma.Descricao</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function filterStudents() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const course = document.getElementById('course').value;
+        
+            
+        const response = await fetch(`/Aluno/FilterStudent?name=${name}&email=${email}&courseId=${course}`);
+        const students = await response.text();
+
+        document.getElementById('studentTable').innerHTML = students;
+    }
+</script>
+
+

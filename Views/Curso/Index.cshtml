@@ -1,0 +1,107 @@
+﻿@model List<Curso>
+
+@{
+    ViewBag.Title = "Leads";
+    Layout = "_Layout";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="container mt-4">
+    @* <form id="filterForm" class="d-flex gap-3 mb-4" oninput="filterStudents()"> *@
+    @*     <div class="form-group"> *@
+    @*         <label for="course" class="form-label">Curso</label> *@
+    @*         <select class="form-select" id="course" name="course"> *@
+    @*             <option value="">Selecione um curso</option> *@
+    @*             @foreach (var curso in ViewBag.Cursos) *@
+    @*             { *@
+    @*                 <option value="@curso.Descricao">@curso.Descricao</option> *@
+    @*             } *@
+    @*         </select> *@
+    @*     </div> *@
+    @* </form> *@
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Ações</th>
+            
+        </tr>
+        </thead>
+        <tbody id="studentTable">
+        @if (Model.Any())
+        {
+            foreach (var curso in Model)
+            {
+                <tr>
+                    <th scope="row">@curso.Id</th>
+                    <td>@curso.Descricao</td>
+                    <td>
+                        <a role="button" class="btn btn-outline-warning btn-sm"
+                           asp-controller="Curso"
+                           asp-action="Edit"
+                           asp-route-id="@curso.Id">
+                            Editar
+                        </a>
+                        <button class="btn btn-outline-danger btn-sm" onclick="openDeleteModal(@curso.Id)">Apagar</button>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function filterStudents() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const course = document.getElementById('course').value;
+
+        const response = await fetch(`/Aluno/FilterStudent?name=${name}&email=${email}&courseId=${course}`);
+        const students = await response.text();
+
+        document.getElementById('studentTable').innerHTML = students;
+    }
+
+    function openDeleteModal(cursoId) {
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = `/Curso/Delete/${cursoId}`;
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+</script>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir este curso?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" method="post">
+                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

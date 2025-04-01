@@ -1,0 +1,37 @@
+﻿@model Turma
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4">Editar Turma</h2>
+        <a href="/Turma" class="btn btn-secondary">Voltar</a>
+    </div>
+
+    <form asp-controller="Turma" asp-action="Update" method="post" class="p-4 border rounded shadow-sm bg-white">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <input type="hidden" asp-for="Id" /> 
+
+        <div class="mb-3">
+            <label for="nomeInput" class="form-label">Curso</label>
+            <input type="text" asp-for="Descricao" class="form-control" id="nomeInput" placeholder="Digite da turma">
+            <span asp-validation-for="Descricao" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="cursoSelect" class="form-label">Curso</label>
+            <select class="form-select" id="cursoSelect" asp-for="CursoId">
+                <option value="">Selecione um curso</option>
+                @foreach (var curso in ViewBag.Cursos)
+                {
+                    <option value="@curso.Id">@curso.Descricao</option>
+                }
+            </select>
+            <span asp-validation-for="CursoId" class="text-danger"></span>
+        </div>
+
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,26 @@
+﻿@model List<Aluno>
+
+@if (Model.Any())
+{
+    foreach (var aluno in Model)
+    {
+        <tr>
+            <th scope="row">@aluno.Id</th>
+            <td>@aluno.Nome</td>
+            <td>@aluno.CodigoMatricula</td>
+            <td>@aluno.Email</td>
+            <td>@aluno.Curso.Descricao</td>
+            <td>@aluno.Turma.Descricao</td>
+            <td>
+                @* <a role="button" class="btn btn-outline-danger btn-sm">Apagar</a> *@
+                @* <a role="button" class="btn btn-outline-warning btn-sm">Editar</a> *@
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="7" class="text-center">Nenhum aluno encontrado</td>
+    </tr>
+}

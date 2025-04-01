@@ -1,0 +1,23 @@
+﻿@model List<Turma>
+
+
+@if (Model.Any())
+{
+    foreach (var turma in Model)
+    {
+        <tr>
+            <th scope="row">@turma.Id</th>
+            <td>@turma.Descricao</td>
+            <td>@turma.Curso.Descricao</td>
+            <td>
+                <a role="button" class="btn btn-outline-warning btn-sm"
+                   asp-controller="Turma"
+                   asp-action="Edit"
+                   asp-route-id="@turma.Id">
+                    Editar
+                </a>
+                <button class="btn btn-outline-danger btn-sm" onclick="openDeleteModal(@turma.Id)">Apagar</button>
+            </td>
+        </tr>
+    }
+}

@@ -1,0 +1,25 @@
+﻿@model FIPECAFI.Models.Modal.ModalModel
+
+<div class="modal fade" id="@Model.ModalId" tabindex="-1" aria-labelledby="@Model.ModalIdLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="@Model.ModalIdLabel">@Model.Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @RenderBody()
+            </div>
+            <div class="modal-footer">
+                @if (Model.ShowCloseButton)
+                {
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                }
+                @if (Model.ShowSaveButton)
+                {
+                    <button type="button" class="btn btn-primary" onclick="@Model.OnSaveAction">Save changes</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
